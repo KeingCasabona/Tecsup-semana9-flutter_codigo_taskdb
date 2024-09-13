@@ -11,11 +11,22 @@ class HomePage extends StatelessWidget {
         title: Text('Home Page'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            DbAdmin.db.initDatabase();
-          },
-          child: Text('Mostrar data'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                DbAdmin.db.getTask();
+              },
+              child: Text('Mostrar data'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                DbAdmin.db.insertTask();
+              },
+              child: Text('Insertar Tarea'),
+            ),
+          ],
         ),
       ),
     );
