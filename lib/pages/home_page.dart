@@ -10,36 +10,26 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home Page'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                DbAdmin.db.getTask();
+      body: FutureBuilder(
+        future: DbAdmin.db.getTask(),
+        builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+          if (asyncSnapshot.hasData) {
+            List<Map<String, dynamic>> myTask = asyncSnapshot.data;
+            return ListView.builder(
+              itemCount: myTask.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(myTask[index]['title']),
+                  subtitle: Text(myTask[index]['description']),
+                  trailing: Text(myTask[index]['status']),
+                  leading: Text(myTask[index]['id'].toString()),
+                );
               },
-              child: Text('Mostrar data'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                DbAdmin.db.insertTask();
-              },
-              child: Text('Insertar Tarea'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                DbAdmin.db.updateTask();
-              },
-              child: Text('Actualizar Tarea'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                DbAdmin.db.deleteTask();
-              },
-              child: Text('Eliminar Tarea'),
-            ),
-          ],
-        ),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
       ),
     );
   }

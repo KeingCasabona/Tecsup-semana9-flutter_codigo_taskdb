@@ -57,10 +57,10 @@ class DbAdmin {
     print(tasks);
   }
 
-  getTask() async {
+  Future<List<Map<String, dynamic>>> getTask() async {
     Database? db = await checkDatabase();
-    List tasks = await db!.query('TASK');
-    print(tasks);
+    List<Map<String, dynamic>> tasks = await db!.query('TASK');
+    return tasks;
   }
 
   updateRawTask() async {
