@@ -21,6 +21,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  deleteTask(int taskId) {
+    DbAdmin.db.deleteTask(taskId).then(
+      (value) {
+        if (value > 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.redAccent,
+              duration: Duration(seconds: 3),
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.only(
+                bottom: 20,
+                left: 10,
+                right: 10,
+              ),
+              content: Row(
+                children: [
+                  Icon(
+                    Icons.check,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Tarea eliminada',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +75,29 @@ class _HomePageState extends State<HomePage> {
             return ListView.builder(
               itemCount: myTask.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(myTask[index].title),
-                  subtitle: Text(myTask[index].description),
-                  trailing: Text(myTask[index].status),
+                return Dismissible(
+                  key: UniqueKey(),
+                  // confirmDismiss: (DismissDirection direction) async {
+                  //   print(direction);
+                  //   return true;
+                  // },
+                  direction: DismissDirection.startToEnd,
+                  background: Container(color: Colors.red),
+                  //secondaryBackground: Text('2'),
+                  onDismissed: (DismissDirection direction) {
+                    deleteTask(myTask[index].id!);
+                  },
+                  child: ListTile(
+                    title: Text(myTask[index].title),
+                    subtitle: Text(myTask[index].description),
+                    leading: Text(myTask[index].id.toString()),
+                    trailing: IconButton(
+                      onPressed: () {
+                        showDialogForm(context);
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                  ),
                 );
               },
             );

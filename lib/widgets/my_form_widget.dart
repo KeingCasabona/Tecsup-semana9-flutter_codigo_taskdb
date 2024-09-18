@@ -20,7 +20,9 @@ addTask() {
     status: isFinished.toString(),
   );
 
-  DbAdmin.db.insertTask(taskModel);
+  DbAdmin.db.insertTask(taskModel).then((value) {
+    print(value);
+  });
 }
 
 class _MyFormWidgetState extends State<MyFormWidget> {
